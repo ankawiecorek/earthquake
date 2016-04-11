@@ -116,7 +116,52 @@ public class EarthQuakeClient {
              
     }
     
+    public void quakesByPhrase(){
+    	EarthQuakeParser parser = new EarthQuakeParser();
+        //String source = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.atom";
+        String source = "data/nov20quakedatasmall.atom";
+        ArrayList<QuakeEntry> list = parser.read(source);
+        System.out.println("read data for " + list.size() + " quakes");
+
+        ArrayList<QuakeEntry> listPhrase = filterByPhrase(list, "any", "Can");
+        for (QuakeEntry qe : listPhrase) {
+           System.out.println(qe); 
+           
+        }
+        System.out.println(listPhrase.size()); 
+        System.out.println("read data for " + list.size() + " quakes");
+    }
+    
+    public ArrayList<QuakeEntry> filterByPhrase(ArrayList<QuakeEntry> quakeData, String indicator, String phrase ){
+    	ArrayList<QuakeEntry> phraseQuakes = new ArrayList<QuakeEntry>();
+    	
+    	if	(indicator == "start"){
+    		for(QuakeEntry qe : quakeData){
+    			if (qe.getInfo().startsWith(phrase)){    				
+    				phraseQuakes.add(qe);  	
+    			}
+    		}
+    		
+    		} else if (indicator == "any"){
+    		for(QuakeEntry qe : quakeData){
+        		if (qe.getInfo().contains(phrase)){    				
+        				phraseQuakes.add(qe);  	
+        		}
+    		}
+    		
+    		} else if (indicator == "end"){
+        	for(QuakeEntry qe : quakeData){
+        		if (qe.getInfo().endsWith(phrase)){    				
+        				phraseQuakes.add(qe);  	
+        		}	
+        	}
+
+    	
+    	}
+    return phraseQuakes;
+    }
+}
+    
 
     
     
-}
